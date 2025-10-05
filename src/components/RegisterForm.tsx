@@ -4,8 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { signUpEmailAction } from "@/actions/sign-up-email.action";
 
 function RegisterForm() {
   const [isPending, setIsPending] = useState(false);
@@ -13,37 +13,20 @@ function RegisterForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    setIsPending(true);
+
     const formData = new FormData(e.target as HTMLFormElement);
 
-    const name = String(formData.get("name"));
-    if (!name) return toast.error("Name is required");
+    const { error } = await signUpEmailAction(formData);
 
-    const email = String(formData.get("email"));
-    if (!email) return toast.error("Email is required");
-
-    const password = String(formData.get("password"));
-    if (!password) return toast.error("Password is required");
-
-    console.log({ name, email, password });
-
-    await signUp.email(
-      { name, email, password },
-      {
-        onReqeust: () => {
-          setIsPending(true);
-        },
-        onResponse: () => {
-          setIsPending(false);
-        },
-        onError: (ctx) => {
-          toast.error(ctx.error.message);
-        },
-        onSuccess: () => {
-          toast.success("Registered successfully. You can now log in.");
-          router.push("/auth/login");
-        },
-      }
-    );
+    if (error) {
+      toast.error(error);
+      setIsPending(false);
+    } else {
+      toast.success("Registered successfully. You can now log in.");
+      router.push("/auth/login");
+    }
   }
 
   return (
