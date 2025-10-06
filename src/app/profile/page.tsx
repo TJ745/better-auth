@@ -7,11 +7,22 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 async function page() {
+  const headerList = await headers();
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headerList,
   });
 
   if (!session) redirect("/auth/login");
+
+  const FULL_POST_ACCESS = await auth.api.userHasPermission({
+    headers: headerList,
+    body: {
+      userId: session.user.id,
+      permissions: {
+        posts: ["update", "delete"],
+      },
+    },
+  });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
@@ -27,6 +38,15 @@ async function page() {
           )}
           <SignOutButton />
         </div>
+        <div className="text-2xl font-bold">Permissions</div>
+
+        <div className="space-x-4">
+          <Button size="sm">Manage Own Posts</Button>
+          <Button size="sm" disabled={!FULL_POST_ACCESS.success}>
+            Manage All Posts
+          </Button>
+        </div>
+
         <pre className="text-sm overflow-clip">
           {JSON.stringify(session, null, 2)}
         </pre>
