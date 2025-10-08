@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signInEmailAction } from "@/actions/sign-in-email.action";
+import Link from "next/link";
 
 function LoginForm() {
   const [isPending, setIsPending] = useState(false);
@@ -40,8 +41,6 @@ function LoginForm() {
         <Input
           type="email"
           name="email"
-          //   value={form.email}
-          //   onChange={handleChange}
           placeholder="you@example.com"
           className="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         />
@@ -49,21 +48,25 @@ function LoginForm() {
 
       {/* Password */}
       <div>
-        <Label className="block text-sm font-medium text-gray-700">
-          Password
-        </Label>
+        <div className="flex justify-between items-center">
+          <Label className="block text-sm font-medium text-gray-700">
+            Password
+          </Label>
+          <Link
+            href="/auth/forgot-password"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Forgot Password?
+          </Link>
+        </div>
         <div className="relative mt-1">
           <Input
-            // type={showPass ? "text" : "password"}
             name="password"
-            // value={form.password}
-            // onChange={handleChange}
             placeholder="••••••••"
             className="w-full rounded-lg border border-gray-300 p-2.5 pr-10 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
           <button
             type="button"
-            // onClick={() => setShowPass(!showPass)}
             className="absolute right-2 top-2.5 text-gray-500 hover:text-gray-700"
           >
             {/* {showPass ? <EyeOff size={18} /> : <Eye size={18} />} */}
@@ -78,7 +81,6 @@ function LoginForm() {
         className="w-full rounded-lg bg-blue-600 p-2.5 text-white transition hover:bg-blue-700 disabled:opacity-50"
       >
         Login
-        {/* {loading ? "Registering..." : "Sign Up"} */}
       </Button>
     </form>
   );
