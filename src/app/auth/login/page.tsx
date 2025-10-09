@@ -1,5 +1,6 @@
 import { BackButton } from "@/components/BackButton";
 import LoginForm from "@/components/LoginForm";
+import MagicLinkForm from "@/components/MagicLinkForm";
 import { SignInOauthButton } from "@/components/SignInOauthButton";
 import Link from "next/link";
 import React from "react";
@@ -13,6 +14,7 @@ function page() {
           Sign In
         </h1>
         <div className="space-y-4">
+          <MagicLinkForm />
           <LoginForm />
           <p className="mt-6 text-center text-sm text-gray-600">
             Don&apos;t have an account?{" "}
